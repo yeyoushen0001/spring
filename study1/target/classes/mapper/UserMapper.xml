@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.wang.study.dao.IUserDao">
+	<resultMap id="User" type="com.wang.study.entity.User">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getUserById" parameterType="int" resultMap="User">
+		select id, nick_name, user_name, password, email from t_user where id=#{id, jdbcType=INTEGER}
+	</select>
+
+	<select id="getAll" resultMap="User">
+		select id, nick_name, user_name, password, email from t_user
+	</select>
+
+	<update id="update" parameterType="com.wang.study.entity.User">
+		update t_user
+		<set>
+			<if test="nickName != null">nick_name = #{nickName,jdbcType=VARCHAR},</if>
+			<if test="userName != null">user_name = #{userName,jdbcType=VARCHAR},</if>
+			<if test="password != null">password = #{password,jdbcType=VARCHAR},</if>
+			<if test="email != null">email = #{email,jdbcType=VARCHAR},</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<insert id="save" parameterType="com.wang.study.entity.User" useGeneratedKeys="true" keyProperty="id">
+		insert into t_user (id, email, nick_name, password, user_name)
+		values(
+			#{id,jdbcType=INTEGER}, 
+			#{email,jdbcType=VARCHAR},
+			#{nickName,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{userName,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<delete id="delete" parameterType="int">
+		delete from t_user where id = #{id,jdbcType=INTEGER}
+	</delete>
+</mapper>
